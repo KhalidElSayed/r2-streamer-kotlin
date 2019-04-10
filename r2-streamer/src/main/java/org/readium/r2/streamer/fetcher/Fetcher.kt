@@ -37,7 +37,16 @@ class Fetcher(var publication: Publication, var container: Container, private va
     }
 
     fun dataStream(path: String): InputStream {
+        // get the page content (e.g. page-1-10.xhtml) as inputStream
         var inputStream = container.dataInputStream(path)
+
+        // trying remove the default viewport to stop overriding the applied one.
+        // try to use Regex to match viewport tag more accurate
+        val pageContent = String(inputStream.readBytes())
+        pageContent.replace("<meta name=\"viewport\" content=\"initial-scale=2.3, user-scalable=no\" />", "")
+        inputStream = pageContent.byteInputStream()
+
+        // apply content on cureent page (e.g. meta, styles, javascript)
         inputStream = contentFilters?.apply(inputStream, publication, container, path) ?: inputStream
         return inputStream
     }
