@@ -51,7 +51,7 @@ class ResourceHandler : RouterNanoHTTPD.DefaultHandler() {
             // If the content is of type html return the response this is done to
             // skip the check for following font deobfuscation check
             if (mimeType == "application/xhtml+xml") {
-                return serveResponse(session, fetcher.dataStream(filePath), mimeType)
+                return serveResponse(session, fetcher.dataStream(filePath, mimeType), mimeType)
             }
 
             // ********************
